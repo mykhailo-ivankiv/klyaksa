@@ -14,8 +14,6 @@ var Spot = function (e){
     ctx.lineWidth = 1;
     ctx.fillStyle = "rgba(256, 256, 256, 1)";
 
-    ctx.beginPath ();
-
     vectors.forEach(function(elem, i){
       var j = i;
       var currentPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
@@ -30,13 +28,16 @@ var Spot = function (e){
       var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
       var controlPoint = currentPoint;
 
+      ctx.beginPath ();
       ctx.moveTo (startPoint.x+4,startPoint.y);
       ctx.arc (startPoint.x,startPoint.y, 4, 0 , 2*Math.PI, true)
-    })
+      ctx.fill();
 
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
+      ctx.moveTo(currentPoint.x,currentPoint.y);
+      ctx.lineTo (nextPoint.x,nextPoint.y);
+      ctx.lineTo (spot.center.x,spot.center.y);
+      ctx.stroke();
+    })
 
     ctx.restore();
   }
@@ -63,8 +64,9 @@ var Spot = function (e){
       ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
 
     })
-      ctx.fill();
-      ctx.stroke();
+
+    ctx.fill();
+    ctx.stroke();
 
     ctx.restore();
   }
