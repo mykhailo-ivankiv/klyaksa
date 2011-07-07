@@ -8,7 +8,11 @@
 
 var Spot = function (e){
 
-  this.draw = function (){
+  this.drawSkeleton = function (){
+    ctx.save();
+
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "rgba(256, 256, 256, 1)";
 
     ctx.beginPath ();
 
@@ -26,11 +30,43 @@ var Spot = function (e){
       var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
       var controlPoint = currentPoint;
 
-      ctx.moveTo (startPoint.x,startPoint.y);
-      ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
+      ctx.moveTo (startPoint.x+4,startPoint.y);
+      ctx.arc (startPoint.x,startPoint.y, 4, 0 , 2*Math.PI, true)
     })
+
+    ctx.fill();
     ctx.stroke();
     ctx.closePath();
+
+    ctx.restore();
+  }
+
+  this.draw = function (){
+    ctx.save();
+
+    ctx.beginPath ();
+    vectors.forEach(function(elem, i){
+      var j = i;
+      var currentPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      j = (i-1) < 0 ? snots.n-1 : i-1 ;
+      var prevPoint = Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      j = (i+1)> snots.n-1 ? 0 :i+1 ;
+      var nextPoint = Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
+      var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
+      var controlPoint = currentPoint;
+
+      if (i == 0 ){ctx.moveTo (startPoint.x,startPoint.y);}
+      ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
+
+    })
+      ctx.fill();
+      ctx.stroke();
+
+    ctx.restore();
   }
 
   this.stopAnimate = function (){
@@ -62,7 +98,8 @@ var Spot = function (e){
   this.animate = function (){
     updateVectors_()
     ctx.clearRect (0,0,canvas.offsetWidth,canvas.offsetHeight);
-    this_.draw ()
+    this_.draw ();
+    this_.drawSkeleton();
     animationTimeout = window.setTimeout(this_.animate, animationTime);
   }
 

@@ -16,7 +16,7 @@ var canvas = document.getElementById('canvas');
     canvas.setAttribute('width', canvas.offsetWidth);
 
 var ctx = canvas.getContext('2d');
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
 canvas.addEventListener('click',drawSpot, false);
