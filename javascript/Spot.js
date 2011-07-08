@@ -160,8 +160,8 @@ var Spot = function (initObj){
 
   this.snots = {
     n : 20,     // Number of this.snots.
-    //max : 300, // Max snot value.
-    min : 100  // Min snot value.
+    max : 300, // Max snot value.
+    min : 200  // Min snot value.
   };
 
   var this_ = this,
