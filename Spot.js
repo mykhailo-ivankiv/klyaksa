@@ -8,35 +8,6 @@
 
 var Spot = function (e){
 
-  this.draw = function (){
-
-    ctx.beginPath ();
-
-    vectors.forEach(function(elem, i){
-      var j = i;
-      var currentPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
-
-      j = (i-1) < 0 ? snots.n-1 : i-1 ;
-      var prevPoint =Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
-
-      j = (i+1)> snots.n-1 ? 0 :i+1 ;
-      var nextPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
-
-      var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
-      var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
-      var controlPoint = currentPoint;
-
-      ctx.moveTo (startPoint.x,startPoint.y);
-      ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
-    })
-    ctx.stroke();
-    ctx.closePath();
-  }
-
-  this.stopAnimate = function (){
-    if (animationTimeout) window.clearTimeout(animationTimeout);
-  }
-
   function updateGrowParams_ (){
     vectors.forEach(function (element, i){
         if (snots.max && element > snots.max) { growthParams_[i] = -1;}
@@ -64,6 +35,35 @@ var Spot = function (e){
     ctx.clearRect (0,0,canvas.offsetWidth,canvas.offsetHeight);
     this_.draw ()
     animationTimeout = window.setTimeout(this_.animate, animationTime);
+  }
+
+  this.stopAnimate = function (){
+    if (animationTimeout) window.clearTimeout(animationTimeout);
+  }
+
+  this.draw = function (){
+
+    ctx.beginPath ();
+
+    vectors.forEach(function(elem, i){
+      var j = i;
+      var currentPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      j = (i-1) < 0 ? snots.n-1 : i-1 ;
+      var prevPoint =Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      j = (i+1)> snots.n-1 ? 0 :i+1 ;
+      var nextPoint=Geometry.getVectorPosition (vectors[j],angle*j,spot.center);
+
+      var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
+      var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
+      var controlPoint = currentPoint;
+
+      ctx.moveTo (startPoint.x,startPoint.y);
+      ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
+    })
+    ctx.stroke();
+    ctx.closePath();
   }
 
   var this_ = this,
