@@ -70,6 +70,11 @@ var Spot = function (e){
       ctx.fill();
     ctx.restore();
 
+    ctx.save();
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.drawImage(imgArray[1],0,0);
+    ctx.restore();
+
     ctx.stroke();
 
     ctx.restore();
@@ -105,7 +110,7 @@ var Spot = function (e){
   this.animate = function (){
 
     ctx.clearRect (0,0,canvas.offsetWidth,canvas.offsetHeight);
-    ctx.drawImage(img1,0,0);
+    ctx.drawImage(imgArray[0],0,0);
 
     updateVectors_()
     this_.draw ();

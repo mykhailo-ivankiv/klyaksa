@@ -18,12 +18,12 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
     ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+
+
 canvas.addEventListener('click',drawSpot, false);
 
-
-var img1 = new Image();
-    img1.src = 'images/img1.jpg';
-
-    img1.onload =function(){
-      ctx.drawImage(img1,0,0);
-    }
+var imgArray = ['images/img1.jpg','images/img2.jpg','images/img3.jpg']
+    imgArray.forEach(function(elem,i){
+      imgArray[i]=new Image();
+      imgArray[i].src=elem;
+    });
