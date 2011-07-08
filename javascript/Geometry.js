@@ -17,7 +17,7 @@ var Geometry = {
   getVectorPosition: function (size, angle , center){
     return {
       x: center.x + Math.cos(angle) * size,
-      y: spot.center.y + Math.sin(angle) * size
+      y: center.y + Math.sin(angle) * size
     }
   }
 }

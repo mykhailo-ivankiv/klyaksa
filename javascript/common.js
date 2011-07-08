@@ -6,9 +6,16 @@
  * Brief description of functionality.
  */
 function drawSpot(e) {
-  if (window.mySpot) mySpot.stopAnimate();
-  window.mySpot = new Spot (e);
-  mySpot.animate();
+
+  var ptrn = ctx.createPattern(imgArray.shift(imgArray.push (imgArray[0])),'no-repeat');
+
+  var initObj = {};
+      initObj.spot = { center : {x : e.clientX, y : e.clientY}};
+      initObj.style = {fillStyle: ["#ffffff",ptrn]}
+
+  window.spots = window.spots || [];
+  spots.push(new Spot (initObj));
+  spots[spots.length-1].animate();
 }
 
 var canvas = document.getElementById('canvas');
@@ -19,6 +26,9 @@ var ctx = canvas.getContext('2d');
     ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
+Animation.addFunction(function(){
+  ctx.clearRect (0,0,canvas.offsetWidth,canvas.offsetHeight);
+})
 
 canvas.addEventListener('click',drawSpot, false);
 
