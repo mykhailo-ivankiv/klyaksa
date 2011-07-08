@@ -14,7 +14,12 @@ function drawSpot(e) {
       initObj.style = {fillStyle: ["#ffffff",ptrn]}
 
   window.spots = window.spots || [];
-  spots.push(new Spot (initObj));
+  if (spots.length < 10) {
+    spots.push(new Spot (initObj));
+  } else {
+    spots[0].init (initObj);
+    spots.shift(spots.push (spots[0]));
+  }
   spots[spots.length-1].animate();
 }
 

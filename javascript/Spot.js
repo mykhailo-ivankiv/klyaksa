@@ -159,24 +159,28 @@ var Spot = function (initObj){
   };
 
   this.snots = {
-    n : 20,     // Number of this.snots.
+    n   : 20 , // Number of this.snots.
     max : 300, // Max snot value.
     min : 200  // Min snot value.
   };
 
   var this_ = this,
       angle = 2*Math.PI/this.snots.n,
-      growthParams_ = [];
+      growthParams_ = [],
+      vectors_ = [];
 
-  for (var i in initObj){
-    for (var j in initObj[i]){
-      if (this[i]) this[i][j]=initObj[i][j];
-    }
-  }
+  this.init = function (initObj){
+    for (var i in initObj){
+      for (var j in initObj[i]){
+        if (this_[i]) this_[i][j]=initObj[i][j];
+      }
+    };
+    for (var i = 0 ; i< this_.snots.n; i++){
+      growthParams_[i] =  1;
+      vectors_[i] = (Math.random()+0.5) * this_.spot.radius;
+    };
+  };
+  
+  this.init(initObj);
 
-  for (var i = 0 ; i< this.snots.n; i++){growthParams_[i] =  1;};
-
-
-  var vectors_ = [];
-  for (var i = 0 ; i < this.snots.n; i++ ){vectors_[i] = (Math.random()+0.5) * this.spot.radius;};
 }
