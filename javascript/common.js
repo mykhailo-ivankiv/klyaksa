@@ -10,9 +10,10 @@ function drawSpot(e) {
   var ptrn = ctx.createPattern(imgArray.shift(imgArray.push (imgArray[0])),'no-repeat');
   window.spots = window.spots || [];
 
-  var initObj = {};
-      initObj.spot = { center : {x : e.clientX, y : e.clientY}};
-      initObj.style = {fillStyle: ["#ffffff",ptrn]}
+  var initObj = {
+        center : {x : e.clientX, y : e.clientY},
+        fillStyle: ["#ffffff",ptrn]
+      }
 
   if (spots.length < 7) {
     spots.push(new Spot (initObj));
@@ -25,9 +26,14 @@ function drawSpot(e) {
   }
 }
 
-var canvas = document.getElementById('canvas');
+function setCanvasSize (){
     canvas.setAttribute('height', canvas.offsetHeight);
     canvas.setAttribute('width', canvas.offsetWidth);
+}
+
+var canvas = document.getElementById('canvas');
+    setCanvasSize ();
+    canvas.addEventListener('resize',setCanvasSize, false);
 
 var ctx = canvas.getContext('2d');
     ctx.lineWidth = 4;

@@ -16,13 +16,13 @@ var Spot = function (initObj){
 
     vectors_.forEach(function(elem, i){
       var j = i;
-      var currentPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this.spot.center);
+      var currentPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this.center);
 
-      j = (i-1) < 0 ? this.snots.n-1 : i-1 ;
-      var prevPoint =Geometry.getVectorPosition (vectors_[j],angle_*j,this.spot.center);
+      j = (i-1) < 0 ? this.snotsCount-1 : i-1 ;
+      var prevPoint =Geometry.getVectorPosition (vectors_[j],angle_*j,this.center);
 
-      j = (i+1)> this.snots.n-1 ? 0 :i+1 ;
-      var nextPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this.spot.center);
+      j = (i+1)> this.snotsCount-1 ? 0 :i+1 ;
+      var nextPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this.center);
 
       var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
       var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
@@ -35,7 +35,7 @@ var Spot = function (initObj){
 
       ctx.moveTo(currentPoint.x,currentPoint.y);
       ctx.lineTo (nextPoint.x,nextPoint.y);
-      ctx.lineTo (this.spot.center.x,this.spot.center.y);
+      ctx.lineTo (this.center.x,this.center.y);
       ctx.stroke();
       ctx.closePath();
     })
@@ -49,13 +49,13 @@ var Spot = function (initObj){
 
     vectors_.forEach(function(elem, i){
       var j = i;
-      var currentPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this_.spot.center);
+      var currentPoint=Geometry.getVectorPosition (vectors_[j],angle_*j,this_.center);
 
-      j = (i-1) < 0 ? this_.snots.n-1 : i-1 ;
-      var prevPoint = Geometry.getVectorPosition (vectors_[j],angle_*j,this_.spot.center);
+      j = (i-1) < 0 ? this_.snotsCount-1 : i-1 ;
+      var prevPoint = Geometry.getVectorPosition (vectors_[j],angle_*j,this_.center);
 
-      j = (i+1)> this_.snots.n-1 ? 0 :i+1 ;
-      var nextPoint = Geometry.getVectorPosition (vectors_[j],angle_*j,this_.spot.center);
+      j = (i+1)> this_.snotsCount-1 ? 0 :i+1 ;
+      var nextPoint = Geometry.getVectorPosition (vectors_[j],angle_*j,this_.center);
 
       var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
       var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
@@ -72,28 +72,27 @@ var Spot = function (initObj){
 
   function stylize_ (){
     ctx.save();
-    ctx.lineWidth = this_.style.lineWidth;
-    ctx.strokeStyle = this_.style.strokeStyle;
+    ctx.lineWidth = this_.lineWidth;
 
-    if (this_.style.fill) {
-      if (this_.style.fillStyle instanceof Array){
-        this_.style.fillStyle.forEach(function(element){
+    if (this_.fill) {
+      if (this_.fillStyle instanceof Array){
+        this_.fillStyle.forEach(function(element){
            ctx.fillStyle = element;
            ctx.fill();
         });
       } else {
-        ctx.fillStyle = this_.style.fillStyle;
+        ctx.fillStyle = this_.fillStyle;
         ctx.fill();
       }
     }
-    if (this_.style.stroke) {
-      if (this_.style.strokeStyle instanceof Array){
-        this_.style.strokeStyle.forEach(function(element){
+    if (this_.stroke) {
+      if (this_.strokeStyle instanceof Array){
+        this_.strokeStyle.forEach(function(element){
            ctx.strokeStyle = element;
            ctx.stroke();
         });
       } else {
-        ctx.strokeStyle = this_.style.strokeStyle;
+        ctx.strokeStyle = this_.strokeStyle;
         ctx.stroke();
       }
     }
@@ -108,14 +107,14 @@ var Spot = function (initObj){
 
   function updateGrowParams_ (){
     vectors_.forEach(function (element, i){
-        if (this_.snots.max && element > this_.snots.max) { growthParams_[i] = -1;}
-        else if (this_.snots.min && element < this_.snots.min) {growthParams_[i] = 1;}
+        if (this_.radiusMax && element > this_.radiusMax) { growthParams_[i] = -1;}
+        else if (this_.radiusMin && element < this_.radiusMin) {growthParams_[i] = 1;}
     })
   }
 
   function getVectorSum_(){
     var vectorSum = 0;
-    vectors_.forEach(function(element){ vectorSum += Math.pow(element,this_.spot.growthFactor)});
+    vectors_.forEach(function(element){ vectorSum += Math.pow(element,this_.growthFactor)});
     return vectorSum;
   }
 
@@ -123,7 +122,7 @@ var Spot = function (initObj){
     updateGrowParams_ ();
 
     vectors_.forEach(function(vector,i){
-      vectors_[i] += (Math.random()*Math.pow(vector,this_.spot.growthFactor) * this_.snots.n * 5 / getVectorSum_()) * growthParams_[i]
+      vectors_[i] += (Math.random()*Math.pow(vector,this_.growthFactor) * this_.snotsCount * 5 / getVectorSum_()) * growthParams_[i]
     })
   }
 
@@ -141,52 +140,23 @@ var Spot = function (initObj){
     Animation.addFunction (drawNextStep_);
   }
 
-  this.spot = {
-    radius : 50,     // Start radius of this.spot.
-    center : {        // Coordinates of this.spot center.
-      x : canvas.offsetWidth/2,
-      y : canvas.offsetHeight/2
-    },
-    growthFactor : 0.5
-  };
-
-  this.style = {
-    fill : true,
-    stroke : true,
-    fillStyle : "#cccccc",
-    lineWidth : '4',
-    strokeStyle :"rgba(0, 0, 0, 1)"
-  };
-
-  this.snots = {
-    n   : 20 , // Number of this.snots.
-    max : 300, // Max snot value.
-    min : 200  // Min snot value.
-  };
-
-  var this_ = this,
-      angle_,
-      growthParams_,
-      vectors_;
-
   this.init = function (initObj){
 
     for (var i in initObj){
-      for (var j in initObj[i]){
-        if (this_[i]) this_[i][j]=initObj[i][j];
-      }
+      if (!this_.hasOwnProperty(i)){this_[i]={};}
+        this_[i]=initObj[i];
     };
 
-    angle_        = 2*Math.PI/this.snots.n;
-    growthParams_ = [];
-    vectors_      = [];
-
-    for (var i = 0 ; i< this_.snots.n; i++){
+    angle_ = 2*Math.PI/this.snotsCount;
+    for (var i = 0 ; i< this_.snotsCount; i++){
       growthParams_[i] =  1;
-      vectors_[i] = (Math.random()+0.5) * this_.spot.radius;
+      vectors_[i] = (Math.random()+0.5) * this_.radius;
     };
   };
-  
+
+  var this_ = this, angle_=[], growthParams_=[], vectors_=[];
   this.init(initObj);
 
 }
+
+Spot.prototype = SpotConfig;
