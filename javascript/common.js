@@ -33,7 +33,7 @@ function setCanvasSize (){
 
 var canvas = document.getElementById('canvas');
     setCanvasSize ();
-    canvas.addEventListener('resize',setCanvasSize, false);
+    window.addEventListener('resize',setCanvasSize, false);
 
 var ctx = canvas.getContext('2d');
     ctx.lineWidth = 4;
