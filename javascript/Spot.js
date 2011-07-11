@@ -128,10 +128,10 @@ var Spot = function (initObj){
   }
 
   function drawNextStep_(){
-      updateVectors_()
-      this_.draw ();
-      //this_.drawSkeleton();
-    }
+    updateVectors_()
+    this_.draw ();
+    //this_.drawSkeleton();
+  }
 
   this.stopAnimate = function (){
     Animation.removeFunction (drawNextStep_);
