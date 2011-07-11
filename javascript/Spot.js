@@ -12,32 +12,27 @@ var Spot = function (initObj){
     ctx.save();
 
     ctx.lineWidth = 1;
-    ctx.fillStyle = "rgba(256, 256, 256, 1)";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.strokeStyle = "#2559dc";
 
-    vectors_.forEach(function(elem, i){
-      var j = i;
-      var currentPoint = vectors_[j].endPoint();
+    vectors_.forEach (function(elem, i){
+      var currentPoint =  vectors_[i].endPoint();
+      var prevPoint    = (vectors_[i-1] || vectors_[vectors_.length-1]).endPoint();
+      var nextPoint    = (vectors_[i+1] || vectors_[0]).endPoint();
 
-      j = (i-1) < 0 ? this_.snotsCount-1 : i-1 ;
-      var prevPoint = vectors_[j].endPoint();
-
-      j = (i+1)> this_.snotsCount-1 ? 0 :i+1 ;
-      var nextPoint = vectors_[j].endPoint();
-
-      var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
-      var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
-      var controlPoint = currentPoint;
+      var startPoint   = Geometry.getMiddlePoint(currentPoint,prevPoint);
+      var endPoint     = Geometry.getMiddlePoint(currentPoint,nextPoint);
 
       ctx.beginPath ();
-      ctx.moveTo (startPoint.x+4,startPoint.y);
-      ctx.arc (startPoint.x,startPoint.y, 4, 0 , 2*Math.PI, true)
-      ctx.fill();
+        ctx.moveTo (startPoint.x+4,startPoint.y);
+        ctx.arc (startPoint.x,startPoint.y, 4, 0 , 2*Math.PI, true)
+        ctx.fill ();
 
-      ctx.moveTo(currentPoint.x,currentPoint.y);
-      ctx.lineTo (nextPoint.x,nextPoint.y);
-      ctx.lineTo (this_.center.x,this_.center.y);
-      ctx.stroke();
-      ctx.closePath();
+        ctx.moveTo (currentPoint.x,currentPoint.y);
+        ctx.lineTo (nextPoint.x,nextPoint.y);
+        ctx.lineTo (this_.center.x,this_.center.y);
+        ctx.stroke ();
+      ctx.closePath ();
     })
 
     ctx.restore();
@@ -47,23 +42,16 @@ var Spot = function (initObj){
 
     ctx.beginPath ();
 
-    vectors_.forEach(function(elem, i){
-      var j = i;
-      var currentPoint=vectors_[j].endPoint();
+    vectors_.forEach (function(elem, i){
+      var currentPoint =  vectors_[i].endPoint();
+      var prevPoint    = (vectors_[i-1] || vectors_[vectors_.length-1]).endPoint();
+      var nextPoint    = (vectors_[i+1] || vectors_[0]).endPoint();
 
-      j = (i-1) < 0 ? this_.snotsCount-1 : i-1 ;
-      var prevPoint = vectors_[j].endPoint();
-
-      j = (i+1)> this_.snotsCount-1 ? 0 :i+1 ;
-      var nextPoint = vectors_[j].endPoint();
-
-      var startPoint = Geometry.getMiddlePoint(currentPoint,prevPoint);
-      var endPoint = Geometry.getMiddlePoint(currentPoint,nextPoint);
-      var controlPoint = currentPoint;
+      var startPoint   = Geometry.getMiddlePoint(currentPoint,prevPoint);
+      var endPoint     = Geometry.getMiddlePoint(currentPoint,nextPoint);
 
       if (i == 0 ){ctx.moveTo (startPoint.x,startPoint.y);}
-      ctx.quadraticCurveTo (controlPoint.x, controlPoint.y, endPoint.x, endPoint.y)
-
+      ctx.quadraticCurveTo (currentPoint.x, currentPoint.y, endPoint.x, endPoint.y);
     })
 
     stylize_();
@@ -106,7 +94,7 @@ var Spot = function (initObj){
   }
 
   function updateGrowParams_ (){
-    vectors_.forEach(function (vector, i){
+    vectors_.forEach (function (vector, i){
         if (this_.radiusMax && vector.height() > this_.radiusMax) { growthParams_[i] = -1;}
         else if (this_.radiusMin && vector.height() < this_.radiusMin) {growthParams_[i] = 1;}
     })
@@ -132,9 +120,9 @@ var Spot = function (initObj){
   }
 
   function drawNextStep_(){
-    updateVectors_()
+    updateVectors_();
     this_.draw ();
-    //this_.drawSkeleton();
+//    this_.drawSkeleton();
   }
 
   this.stopAnimate = function (){
