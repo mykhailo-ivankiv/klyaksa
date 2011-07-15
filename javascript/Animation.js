@@ -12,7 +12,7 @@ var Animation = function(){
   var this_= this;
 
   var animationTimeout_ = null,
-      animationTime_ = 50,
+      animationTime_ = 40,
       animations = [];
 
   this.start = function(){
