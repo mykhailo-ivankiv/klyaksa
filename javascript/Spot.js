@@ -63,26 +63,13 @@ var Spot = function (initObj){
     ctx.lineWidth = this_.lineWidth;
 
     if (this_.fill) {
-      if (this_.fillStyle instanceof Array){
-        this_.fillStyle.forEach(function(element){
-           ctx.fillStyle = element;
-           ctx.fill();
-        });
-      } else {
-        ctx.fillStyle = this_.fillStyle;
-        ctx.fill();
-      }
+      ctx.fillStyle = this_.fillStyle;
+      ctx.fill();
     }
+
     if (this_.stroke) {
-      if (this_.strokeStyle instanceof Array){
-        this_.strokeStyle.forEach(function(element){
-           ctx.strokeStyle = element;
-           ctx.stroke();
-        });
-      } else {
         ctx.strokeStyle = this_.strokeStyle;
         ctx.stroke();
-      }
     }
     ctx.restore();
   }

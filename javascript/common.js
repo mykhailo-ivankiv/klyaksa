@@ -26,24 +26,13 @@ function drawSpot(e) {
   }
 }
 
-function setCanvasSize (){
-    canvas.setAttribute('height', canvas.offsetHeight);
-    canvas.setAttribute('width', canvas.offsetWidth);
-}
-
-var canvas = document.getElementById('canvas');
-    setCanvasSize ();
-    window.addEventListener('resize',setCanvasSize, false);
-
-var ctx = canvas.getContext('2d');
+var ctx = new Canvas (document.getElementById('canvas'));
     ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
-Animation.addFunction(function(){
-  ctx.clearRect (0,0,canvas.offsetWidth,canvas.offsetHeight);
-})
+Animation.addFunction(ctx.clear)
 
-canvas.addEventListener('click',drawSpot, false);
+ctx.container.addEventListener('click',drawSpot, false);
 
 var imgArray = ['images/img1.jpg','images/img2.jpg','images/img3.jpg']
     imgArray.forEach(function(elem,i){
