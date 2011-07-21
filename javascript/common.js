@@ -30,9 +30,9 @@ var ctx = new Canvas (document.getElementById('canvas'));
     ctx.lineWidth = 4;
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
-Animation.addFunction(ctx.clear)
+Animation.addFunction(ctx.clear);
 
-ctx.container.addEventListener('click',drawSpot, false);
+ctx.addEventListener('click',drawSpot, false);
 
 var imgArray = ['images/img1.jpg','images/img2.jpg','images/img3.jpg']
     imgArray.forEach(function(elem,i){

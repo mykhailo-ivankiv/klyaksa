@@ -5,11 +5,13 @@
  * Time: 5:06 PM
  * To change this template use File | Settings | File Templates.
  */
+
 /**
  *
  * @param el {Element} canvas DOM element;
  */
 var Canvas = function(el){
+
   var this_ = this;
   this_.container = el;
 
@@ -26,6 +28,14 @@ var Canvas = function(el){
     this_.width = this_.container.offsetWidth
     this_.container.setAttribute('height', this_.height);
     this_.container.setAttribute('width', this_.width);
+  }
+
+  this.addEventListener = function (event, fn, capturing){
+    this.container.addEventListener(event, fn, capturing);
+  }
+
+  this.removeEventListener = function (event, fn, capturing){
+    this.container.removeEventListener(event, fn, capturing);
   }
 
   this.fill = function(){

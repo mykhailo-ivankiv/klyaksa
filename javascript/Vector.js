@@ -38,7 +38,6 @@ var Vector = function (){
       endPoint_=newEndPoint;
       angle_= Math.atan((endPoint_.y-startPoint_.y)/(endPoint_.x - startPoint_.x));
       height_ = Math.sqrt(Math.pow(endPoint_.x-startPoint_.x,2)+Math.pow(endPoint_.y-startPoint_.y,2));
-      console.log(endPoint_.x-startPoint_.x,(endPoint_.y-startPoint_.y),height_);
     }else{
       return endPoint_;
     }
