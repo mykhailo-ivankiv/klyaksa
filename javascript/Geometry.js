@@ -7,7 +7,7 @@
  */
 
 var Geometry = {
-  getMiddlePoint: function (){
+  getMiddlePoint: function (p1,p2){
     return {
       x : (arguments[0].x + arguments[1].x)/2,
       y : (arguments[0].y + arguments[1].y)/2

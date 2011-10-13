@@ -64,8 +64,10 @@ var Vector = function (){
   };
 
   this.draw = function(){
+    ctx.beginPath();
     ctx.moveTo(startPoint_.x,startPoint_.y);
     ctx.lineTo(endPoint_.x,endPoint_.y);
     ctx.stroke();
+    ctx.closePath();
   }
 }
