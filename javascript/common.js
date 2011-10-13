@@ -39,3 +39,9 @@ var imgArray = ['images/img1.jpg','images/img2.jpg','images/img3.jpg']
       imgArray[i]=new Image();
       imgArray[i].src=elem;
     });
+
+function vectorsIntersect (){
+  if (window.spots) console.log(spots);
+}
+
+Animation.addFunction(vectorsIntersect)
