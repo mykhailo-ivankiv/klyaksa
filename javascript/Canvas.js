@@ -45,6 +45,7 @@ var Canvas = function(el){
         this_.__proto__.fill();
       });
     } else {
+      this_.__proto__.fillStyle = this_.fillStyle;
       this.__proto__.fill();
     }
   }
@@ -56,6 +57,7 @@ var Canvas = function(el){
         this_.__proto__.stroke();
       });
     } else {
+      this_.__proto__.strokeStyle = this_.strokeStyle;
       this.__proto__.stroke();
     }
   }
