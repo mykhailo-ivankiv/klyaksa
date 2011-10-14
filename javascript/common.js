@@ -69,7 +69,6 @@ function vectorsIntersect (p1,p2,p3,p4){
 
 
 function spotsIntersect (){
-  var intersectedVectors = [];
   if (!window.spots) return;
   for (var i = 0; i < spots.length; i++){ // Spots
     for (var j = i+1; j< spots.length; j++){
@@ -81,17 +80,14 @@ function spotsIntersect (){
                 f.currentPoint =  spots[i].vectors[k].endPoint();
 //                f.prevPoint    = (spots[i].vectors[k-1] || spots[i].vectors[spots[i].vectors.length-1]).endPoint();
                 f.nextPoint    = (spots[i].vectors[k+1] || spots[i].vectors[0]).endPoint();
+                f.center = Geometry.getMiddlePoint(f.currentPoint,f.nextPoint);
             var s ={}
                 s.currentPoint =  spots[j].vectors[p].endPoint();
 //                s.prevPoint    = (spots[j].vectors[p-1] || spots[j].vectors[spots[j].vectors.length-1]).endPoint();
                 s.nextPoint    = (spots[j].vectors[p+1] || spots[j].vectors[0]).endPoint();
+                s.center = Geometry.getMiddlePoint(s.currentPoint,s.nextPoint);
 
-          if (vectorsIntersect(f.currentPoint,
-                               f.nextPoint,
-                               s.currentPoint,
-                               s.nextPoint
-                              )
-          ){
+          if (vectorsIntersect(f.currentPoint, f.nextPoint, s.currentPoint, s.nextPoint)){
             var vectorF = new Vector();
                 vectorF.startPoint (f.currentPoint);
                 vectorF.endPoint   (f.nextPoint   );
@@ -100,12 +96,37 @@ function spotsIntersect (){
                 vectorS.startPoint (s.currentPoint);
                 vectorS.endPoint   (s.nextPoint    );
 
+//            ctx.save();
+//            ctx.strokeStyle = "red";
+//            vectorS.draw();
+//            vectorF.draw();
+//            ctx.restore();
+
+            var intersectionPoint = Geometry.getIntersectionPoint (f.currentPoint, f.nextPoint, s.currentPoint, s.nextPoint)
+
+//            ctx.save();
+//            ctx.beginPath();
+//
+//              ctx.strokeStyle = "red";
+//              ctx.fillStyle = "green";
+//              ctx.moveTo (intersectionPoint.x+4,intersectionPoint.y);
+//              ctx.arc (intersectionPoint.x,intersectionPoint.y, 4, 0 , 2*Math.PI, true)
+//              ctx.fill ();
+//
+//            ctx.closePath();
+//            ctx.restore();
+
             ctx.save();
-            ctx.strokeStyle = "red";
-            vectorS.draw();
-            vectorF.draw();
+            ctx.beginPath();
+              ctx.strokeStyle = "black";
+              ctx.moveTo (f.center.x,f.center.y);
+              ctx.quadraticCurveTo (intersectionPoint.x, intersectionPoint.y, s.center.x, s.center.y);
+              ctx.stroke();
+            ctx.closePath();
             ctx.restore();
-            intersectedVectors.push([spots[j].vectors[p], spots[i].vectors[k]])
+
+
+
           }
         }
       }

@@ -7,8 +7,8 @@
  */
 var SpotConfig = {
 
-    radius : 50,     // Start radius of this.spot.
-    radiusMax : 100, // Max snot value.
+    radius : 100,     // Start radius of this.spot.
+    radiusMax : 200, // Max snot value.
     radiusMin : 50,  // Min snot value.
 
     snotsCount   : 3 , // Number of this.snots.

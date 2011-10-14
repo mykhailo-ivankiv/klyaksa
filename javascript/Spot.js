@@ -108,7 +108,7 @@ var Spot = function (initObj){
 
   function drawNextStep_(){
     updateVectors_();
-    this_.draw ();
+//    this_.draw ();
     this_.drawSkeleton();
   }
 

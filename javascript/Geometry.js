@@ -19,5 +19,12 @@ var Geometry = {
       x: center.x + Math.cos(angle) * size,
       y: center.y + Math.sin(angle) * size
     }
+  },
+  getIntersectionPoint: function (p1,p2,p3,p4){
+    var ua = ((p4.x-p3.x)*(p1.y-p3.y)-(p4.y-p3.y)*(p1.x-p3.x))/
+             ((p4.y-p3.y)*(p2.x-p1.x)-(p4.x-p3.x)*(p2.y-p1.y))
+
+    return { x : p1.x + ua * (p2.x - p1.x) ,
+             y : p1.y + ua * (p2.y - p1.y) }
   }
 }
