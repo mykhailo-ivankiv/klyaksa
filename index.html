@@ -1,51 +1,38 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en-US">
-<head>
-  <meta charset="UTF-8">
-  <title>Canvas test</title>
-
-    <link  href="http://fonts.googleapis.com/css?family=Zeyada:regular&v1" rel="stylesheet" type="text/css" >
+  <head>
+    <meta charset="UTF-8" />
+    <title>Klyaksa</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Zeyada&text=Klyaksa"
+      rel="stylesheet"
+    />
     <style>
-    *{margin: 0; padding: 0;}
-    h1 {
-      font-family: 'Zeyada', serif;
-      font-size: 149px;
-      font-style: normal;
-      font-weight: 700;
-      text-shadow: 8px 8px 8px #ddd;
-      text-decoration: none;
-      text-transform: none;
-      letter-spacing: 0.133em;
-      word-spacing: -0.159em;
-      line-height: 1.75;
-      
-      text-align: center;
-    }
+      h1 {
+        margin: 20px;
+        font-family: "Zeyada", serif;
+        font-size: 10rem;
+        text-align: center;
+      }
 
-    canvas {position: absolute; height: 100%; width: 100%; top: 0; left: 0;}
-    article {margin: 20px;}
+      canvas {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
 
-    body {
-      background-position: left top;
-      background-repeat: no-repeat;
-    }
-
-  </style>
-</head>
-<body>
-
-  <article>
+      body {
+        background-position: left top;
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
+  <body>
     <h1>Klyaksa</h1>
-  </article>
-  <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas>
 
-  <script src="javascript/Geometry.js" type="text/javascript"></script>
-  <script src="javascript/EventMachine.js" type="text/javascript"></script>
-  <script src="javascript/Animation.js" type="text/javascript"></script>
-  <script src="javascript/Vector.js" type="text/javascript"></script>
-  <script src="javascript/SpotConfig.js" type="text/javascript"></script>
-  <script src="javascript/Spot.js" type="text/javascript"></script>
-  <script src="javascript/common.js" type="text/javascript"></script>
-
-</body>
+    <script src="javascript/main.js" type="module"></script>
+  </body>
 </html>

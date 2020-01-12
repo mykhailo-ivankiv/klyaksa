@@ -1,11 +1,4 @@
-/**
- * Created by JetBrains WebStorm.
- * User: neformal
- * Date: 7/9/11
- * Time: 12:05 AM
- * To change this template use File | Settings | File Templates.
- */
-var SpotConfig = {
+const SpotConfig = {
 
     radius : 50,     // Start radius of this.spot.
     radiusMax : 300, // Max snot value.
@@ -25,3 +18,5 @@ var SpotConfig = {
     lineWidth : '4',
     strokeStyle :"rgba(0, 0, 0, 1)"
 }
+
+export default SpotConfig
