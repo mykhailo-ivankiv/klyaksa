@@ -3,7 +3,7 @@ import {
   getVectorBasedOnPolarCoordinate,
   getVectorHeight,
   changeVectorHeight
-} from "./Vector.js";
+} from "./vector.js";
 import Animation from "./Animation.js";
 import { getMiddlePoint } from "./geometry.js";
 
