@@ -1,16 +1,27 @@
 import Animation from "./Animation.js";
 import Spot from "./Spot.js";
 
-function drawSpot(e) {
-  var ptrn = ctx.createPattern(
+const imgArray = ["images/img1.jpg", "images/img2.jpg", "images/img3.jpg"].map(
+  elemSrc => {
+    const img = new Image();
+    img.src = elemSrc;
+    return img;
+  }
+);
+
+const spots = [];
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const drawSpot = ({ clientX, clientY }) => {
+  const pattern = ctx.createPattern(
     imgArray.shift(imgArray.push(imgArray[0])),
     "no-repeat"
   );
-  window.spots = window.spots || [];
 
-  var initObj = {
-    center: { x: e.clientX, y: e.clientY },
-    fillStyle: ["#ffffff", ptrn]
+  const initObj = {
+    center: { x: clientX, y: clientY },
+    fillStyle: ["#ffffff", pattern]
   };
 
   const spot = new Spot(initObj, ctx);
@@ -20,18 +31,16 @@ function drawSpot(e) {
     spots[0].stopAnimate();
     spots.shift();
   }
-}
+};
 
 function setCanvasSize() {
   canvas.setAttribute("height", canvas.offsetHeight);
   canvas.setAttribute("width", canvas.offsetWidth);
 }
 
-var canvas = document.getElementById("canvas");
 setCanvasSize();
 window.addEventListener("resize", setCanvasSize, false);
 
-var ctx = canvas.getContext("2d");
 ctx.lineWidth = 4;
 ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
@@ -40,9 +49,3 @@ Animation.subscribe(() =>
 );
 
 canvas.addEventListener("click", drawSpot, false);
-
-var imgArray = ["images/img1.jpg", "images/img2.jpg", "images/img3.jpg"];
-imgArray.forEach(function(elem, i) {
-  imgArray[i] = new Image();
-  imgArray[i].src = elem;
-});

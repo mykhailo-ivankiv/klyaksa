@@ -54,10 +54,12 @@ class Spot {
   updateGrowParams() {
     this.vectors.forEach((vector, i) => {
       const height = getVectorHeight(vector);
+
       if (this.radiusMax && height > this.radiusMax) {
         this.growthParams[i] = -1;
         return;
       }
+
       if (this.radiusMin && height < this.radiusMin) {
         this.growthParams[i] = 1;
         return;
@@ -105,30 +107,21 @@ export const drawSpot = (vectors, ctx, styleProps) => {
 
   ctx.lineWidth = lineWidth;
 
-  if (fill) {
-    if (fillStyle instanceof Array) {
-      fillStyle.forEach(element => {
-        ctx.fillStyle = element;
-        ctx.fill();
-      });
-    } else {
-      ctx.fillStyle = fillStyle;
+  fill &&
+    (Array.isArray(fillStyle) ? fillStyle : [fillStyle]).forEach(element => {
+      ctx.fillStyle = element;
       ctx.fill();
-    }
-  }
+    });
 
-  if (stroke) {
-    if (strokeStyle instanceof Array) {
-      strokeStyle.forEach(element => {
+  stroke &&
+    (Array.isArray(strokeStyle) ? strokeStyle : [strokeStyle]).forEach(
+      element => {
         ctx.strokeStyle = element;
         ctx.stroke();
-      });
-    } else {
-      ctx.strokeStyle = strokeStyle;
-      ctx.stroke();
-    }
-  }
+      }
+    );
   ctx.restore();
+
   ctx.closePath();
 };
 
