@@ -35,9 +35,9 @@ var ctx = canvas.getContext("2d");
 ctx.lineWidth = 4;
 ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 
-Animation.subscribe(function() {
-  ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-});
+Animation.subscribe(() =>
+  ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
+);
 
 canvas.addEventListener("click", drawSpot, false);
 
