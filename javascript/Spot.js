@@ -5,7 +5,7 @@ import {
   changeVectorHeight
 } from "./Vector.js";
 import Animation from "./Animation.js";
-import { getMiddlePoint } from "./ffff-geometry.js";
+import { getMiddlePoint } from "./geometry.js";
 
 class Spot {
   constructor(initObj, ctx) {
