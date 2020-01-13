@@ -65,100 +65,99 @@ class Spot {
     });
   }
 
-  stylize = () => {
-    this.ctx.save();
-    this.ctx.lineWidth = this.lineWidth;
-
-    if (this.fill) {
-      if (this.fillStyle instanceof Array) {
-        this.fillStyle.forEach(element => {
-          this.ctx.fillStyle = element;
-          this.ctx.fill();
-        });
-      } else {
-        this.ctx.fillStyle = this.fillStyle;
-        this.ctx.fill();
-      }
-    }
-    if (this.stroke) {
-      if (this.strokeStyle instanceof Array) {
-        this.strokeStyle.forEach(function(element) {
-          this.ctx.strokeStyle = element;
-          this.ctx.stroke();
-        });
-      } else {
-        this.ctx.strokeStyle = this.strokeStyle;
-        this.ctx.stroke();
-      }
-    }
-    this.ctx.restore();
-  };
-
-  draw() {
-    this.ctx.beginPath();
-
-    this.vectors.forEach((vector, i) => {
-      var currentPoint = vector.end;
-      var prevPoint = (
-        this.vectors[i - 1] || this.vectors[this.vectors.length - 1]
-      ).end;
-      var nextPoint = (this.vectors[i + 1] || this.vectors[0]).end;
-
-      var startPoint = getMiddlePoint(currentPoint, prevPoint);
-      var endPoint = getMiddlePoint(currentPoint, nextPoint);
-
-      if (i == 0) {
-        this.ctx.moveTo(startPoint.x, startPoint.y);
-      }
-      this.ctx.quadraticCurveTo(
-        currentPoint.x,
-        currentPoint.y,
-        endPoint.x,
-        endPoint.y
-      );
-    });
-
-    this.stylize();
-    this.ctx.closePath();
-  }
-
   drawNextStep = () => {
     this.updateVectors();
-    this.draw();
-    // this.drawSkeleton();
-  };
-
-  drawSkeleton() {
-    this.ctx.save();
-
-    this.ctx.lineWidth = 1;
-    this.ctx.fillStyle = "#FFFFFF";
-    this.ctx.strokeStyle = "#2559dc";
-
-    this.vectors.forEach((elem, i) => {
-      var currentPoint = this.vectors[i].end;
-      var prevPoint = (
-        this.vectors[i - 1] || this.vectors[this.vectors.length - 1]
-      ).end;
-      var nextPoint = (this.vectors[i + 1] || this.vectors[0]).end;
-
-      var startPoint = getMiddlePoint(currentPoint, prevPoint);
-      var endPoint = getMiddlePoint(currentPoint, nextPoint);
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(startPoint.x + 4, startPoint.y);
-      this.ctx.arc(startPoint.x, startPoint.y, 4, 0, 2 * Math.PI, true);
-      this.ctx.fill();
-
-      this.ctx.moveTo(currentPoint.x, currentPoint.y);
-      this.ctx.lineTo(nextPoint.x, nextPoint.y);
-      this.ctx.lineTo(this.center.x, this.center.y);
-      this.ctx.stroke();
-      this.ctx.closePath();
+    drawSpot(this.vectors, this.ctx, {
+      lineWidth: this.lineWidth,
+      fill: this.fill,
+      fillStyle: this.fillStyle,
+      stroke: this.stroke,
+      strokeStyle: this.strokeStyle
     });
-
-    this.ctx.restore();
-  }
+    // drawSkeleton(this.vectors, this.ctx);
+  };
 }
+
+export const drawSpot = (vectors, ctx, styleProps) => {
+  ctx.beginPath();
+
+  vectors.forEach((vector, i) => {
+    const currentPoint = vector.end;
+    const prevPoint = (vectors[i - 1] || vectors[vectors.length - 1]).end;
+    const nextPoint = (vectors[i + 1] || vectors[0]).end;
+
+    const startPoint = getMiddlePoint(currentPoint, prevPoint);
+    const endPoint = getMiddlePoint(currentPoint, nextPoint);
+
+    if (i == 0) ctx.moveTo(startPoint.x, startPoint.y);
+
+    ctx.quadraticCurveTo(
+      currentPoint.x,
+      currentPoint.y,
+      endPoint.x,
+      endPoint.y
+    );
+  });
+
+  ctx.save();
+
+  const { lineWidth, fill, fillStyle, stroke, strokeStyle } = styleProps;
+
+  ctx.lineWidth = lineWidth;
+
+  if (fill) {
+    if (fillStyle instanceof Array) {
+      fillStyle.forEach(element => {
+        ctx.fillStyle = element;
+        ctx.fill();
+      });
+    } else {
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+    }
+  }
+
+  if (stroke) {
+    if (strokeStyle instanceof Array) {
+      strokeStyle.forEach(element => {
+        ctx.strokeStyle = element;
+        ctx.stroke();
+      });
+    } else {
+      ctx.strokeStyle = strokeStyle;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+  ctx.closePath();
+};
+
+export const drawSkeleton = (vectors, ctx) => {
+  ctx.save();
+
+  ctx.lineWidth = 1;
+  ctx.fillStyle = "#FFFFFF";
+  ctx.strokeStyle = "#2559dc";
+
+  vectors.forEach((elem, i) => {
+    const currentPoint = vectors[i].end;
+    const prevPoint = (vectors[i - 1] || vectors[vectors.length - 1]).end;
+    const nextPoint = (vectors[i + 1] || vectors[0]).end;
+    const startPoint = getMiddlePoint(currentPoint, prevPoint);
+
+    ctx.beginPath();
+    ctx.moveTo(startPoint.x + 4, startPoint.y);
+    ctx.arc(startPoint.x, startPoint.y, 4, 0, 2 * Math.PI, true);
+    ctx.fill();
+
+    ctx.moveTo(currentPoint.x, currentPoint.y);
+    ctx.lineTo(nextPoint.x, nextPoint.y);
+    ctx.lineTo(vectors[i].start.x, vectors[i].start.y);
+    ctx.stroke();
+    ctx.closePath();
+  });
+
+  ctx.restore();
+};
 
 export default Spot;
