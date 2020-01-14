@@ -2,10 +2,10 @@ import SpotConfig from "./SpotConfig.js";
 import {
   getVectorBasedOnPolarCoordinate,
   getVectorHeight,
-  changeVectorHeight
+  changeVectorHeight,
+  getMiddlePoint
 } from "./vector.js";
 import Animation from "./Animation.js";
-import { getMiddlePoint } from "./geometry.js";
 
 class Spot {
   constructor(initObj, ctx) {
@@ -15,15 +15,15 @@ class Spot {
 
     const angle = (2 * Math.PI) / this.snotsCount;
     this.growthParams = new Array(this.snotsCount).fill(1);
-    this.vectors = new Array(this.snotsCount).fill().map((_, i) => {
-      const vector = getVectorBasedOnPolarCoordinate(
-        this.center,
-        angle * i,
-        (Math.random() + 0.5) * this.radius
+    this.vectors = new Array(this.snotsCount)
+      .fill()
+      .map((_, i) =>
+        getVectorBasedOnPolarCoordinate(
+          this.center,
+          angle * i,
+          (Math.random() + 0.5) * this.radius
+        )
       );
-
-      return vector;
-    });
   }
 
   stopAnimate = () => {}; //TODO: fix it
@@ -31,44 +31,28 @@ class Spot {
     this.stopAnimate = Animation.subscribe(this.drawNextStep);
   };
 
-  updateVectors() {
-    this.updateGrowParams();
-
+  drawNextStep = () => {
     this.vectors = this.vectors.map((vector, i) => {
       const height = getVectorHeight(vector);
       const vectorSum = this.vectors.reduce(
         (sum, vector) => sum + getVectorHeight(vector) ** this.growthFactor,
         0
       );
-      const growthParam = this.growthParams[i];
+
+      // prettier-ignore
+      this.growthParams[i] =
+        (this.radiusMax && height > this.radiusMax) ? -1
+      : (this.radiusMin && height < this.radiusMin) ? 1
+      : this.growthParams[i];
 
       const diff =
         ((Math.random() * height ** this.growthFactor * this.snotsCount * 5) /
           vectorSum) *
-        growthParam;
+        this.growthParams[i];
 
       return changeVectorHeight(vector, height + diff);
     });
-  }
 
-  updateGrowParams() {
-    this.vectors.forEach((vector, i) => {
-      const height = getVectorHeight(vector);
-
-      if (this.radiusMax && height > this.radiusMax) {
-        this.growthParams[i] = -1;
-        return;
-      }
-
-      if (this.radiusMin && height < this.radiusMin) {
-        this.growthParams[i] = 1;
-        return;
-      }
-    });
-  }
-
-  drawNextStep = () => {
-    this.updateVectors();
     drawSpot(this.vectors, this.ctx, {
       lineWidth: this.lineWidth,
       fill: this.fill,
@@ -76,30 +60,32 @@ class Spot {
       stroke: this.stroke,
       strokeStyle: this.strokeStyle
     });
+
     // drawSkeleton(this.vectors, this.ctx);
   };
 }
 
 export const drawSpot = (vectors, ctx, styleProps) => {
-  ctx.beginPath();
+  let [path] = [...vectors, vectors[0]].reduce(
+    ([path, prevPoint, isStart], vector) => {
+      const currentPoint = vector.end;
+      const middlePoint = getMiddlePoint(prevPoint, currentPoint);
 
-  vectors.forEach((vector, i) => {
-    const currentPoint = vector.end;
-    const prevPoint = (vectors[i - 1] || vectors[vectors.length - 1]).end;
-    const nextPoint = (vectors[i + 1] || vectors[0]).end;
+      if (isStart) {
+        path.moveTo(middlePoint.x, middlePoint.y);
+      } else {
+        path.quadraticCurveTo(
+          prevPoint.x,
+          prevPoint.y,
+          middlePoint.x,
+          middlePoint.y
+        );
+      }
 
-    const startPoint = getMiddlePoint(currentPoint, prevPoint);
-    const endPoint = getMiddlePoint(currentPoint, nextPoint);
-
-    if (i == 0) ctx.moveTo(startPoint.x, startPoint.y);
-
-    ctx.quadraticCurveTo(
-      currentPoint.x,
-      currentPoint.y,
-      endPoint.x,
-      endPoint.y
-    );
-  });
+      return [path, currentPoint];
+    },
+    [new Path2D(), vectors[vectors.length - 1].end, true]
+  );
 
   ctx.save();
 
@@ -110,19 +96,17 @@ export const drawSpot = (vectors, ctx, styleProps) => {
   fill &&
     (Array.isArray(fillStyle) ? fillStyle : [fillStyle]).forEach(element => {
       ctx.fillStyle = element;
-      ctx.fill();
+      ctx.fill(path);
     });
 
   stroke &&
     (Array.isArray(strokeStyle) ? strokeStyle : [strokeStyle]).forEach(
       element => {
         ctx.strokeStyle = element;
-        ctx.stroke();
+        ctx.stroke(path);
       }
     );
   ctx.restore();
-
-  ctx.closePath();
 };
 
 export const drawSkeleton = (vectors, ctx) => {
