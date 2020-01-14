@@ -11,10 +11,8 @@ export const getVectorBasedOnPolarCoordinate = (start, angle, height) => ({
 export const getVectorHeight = ({ start, end }) =>
   Math.sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2);
 
-export const getVectorAngle = ({ start, end }) => {
-  const angle = Math.atan2(end.y - start.y, end.x - start.x);
-  return angle;
-};
+export const getVectorAngle = ({ start, end }) =>
+  Math.atan2(end.y - start.y, end.x - start.x);
 
 export const changeVectorHeight = (vector, height) => {
   const { start, end } = vector;
