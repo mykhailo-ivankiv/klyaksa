@@ -1,11 +1,6 @@
 import Animation from "./Animation.js";
-
-import {
-  getSpot,
-  drawWithStyle,
-  getSkeletonShapes,
-  getSpotShape
-} from "./spot.js";
+import { getSpot, getSkeletonShapes, getSpotShape } from "./spot.js";
+import { drawWithStyle } from "./canvas.js";
 
 const spots = [];
 const canvas = document.getElementById("canvas");
@@ -17,7 +12,6 @@ const fillPattern = (function* getFillPattern(images) {
     img.src = imgSrc;
     return img;
   });
-
   let patternIndex = 0;
 
   while (1) {
@@ -36,42 +30,39 @@ adjustCanvasSize(canvas);
 Animation.subscribe(() => {
   ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
-  spots.map(spot => {
-    const [vectors, fillStyle] = spot.next().value;
+  spots.map(([vectorGenerator, spotStyle]) => {
+    const vectors = vectorGenerator.next().value;
 
-    const spotStyle = {
-      lineWidth: 4,
-      fillStyle,
-      strokeStyle: "rgba(0, 0, 0, 1)"
-    };
-
-    const circlesStyle = { lineWidth: 1, strokeStyle: "#2559dc" };
-    const linesStyle = {
-      lineWidth: 1,
-      strokeStyle: "#2559dc",
-      fillStyle: "#FFFFFF"
-    };
-
-    const [circles, lines] = getSkeletonShapes(vectors);
     const spotPath = getSpotShape(vectors);
-
     drawWithStyle(ctx, spotStyle, spotPath);
-    drawWithStyle(ctx, circlesStyle, lines);
-    drawWithStyle(ctx, linesStyle, circles);
+
+    // const circlesStyle = { lineWidth: 1, strokeStyle: "#2559dc" };
+    // const linesStyle = {
+    //   lineWidth: 1,
+    //   strokeStyle: "#2559dc",
+    //   fillStyle: "#FFFFFF"
+    // };
+    //
+    // const [circles, lines] = getSkeletonShapes(vectors);
+    //
+    // drawWithStyle(ctx, circlesStyle, lines);
+    // drawWithStyle(ctx, linesStyle, circles);
   });
 });
 
-window.addEventListener("resize", () => adjustCanvasSize(canvas), false);
-canvas.addEventListener(
-  "click",
-  ({ clientX: x, clientY: y }) => {
-    const pattern = fillPattern.next().value;
-    const spot = getSpot({ x, y }, ["#ffffff", pattern]);
+window.addEventListener("resize", () => adjustCanvasSize(canvas));
+canvas.addEventListener("click", ({ clientX: x, clientY: y }) => {
+  const pattern = fillPattern.next().value;
+  const vectorGenerator = getSpot({ x, y });
 
-    spots.push(spot);
-    if (spots.length >= 7) {
-      spots.shift();
+  spots.push([
+    vectorGenerator,
+    {
+      lineWidth: 4,
+      fillStyle: ["#ffffff", pattern],
+      strokeStyle: "rgba(0, 0, 0, 1)"
     }
-  },
-  false
-);
+  ]);
+
+  if (spots.length >= 7) spots.shift();
+});
