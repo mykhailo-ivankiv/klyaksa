@@ -1,4 +1,3 @@
-import Animation from "./Animation.js";
 import { getSpot, getSkeletonShapes, getSpotShape } from "./spot.js";
 import { drawWithStyle } from "./canvas.js";
 
@@ -27,7 +26,7 @@ const adjustCanvasSize = canvas => {
 
 adjustCanvasSize(canvas);
 
-Animation.subscribe(() => {
+const drawSpot = () => {
   ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
   spots.map(([vectorGenerator, spotStyle]) => {
@@ -48,7 +47,13 @@ Animation.subscribe(() => {
     // drawWithStyle(ctx, circlesStyle, lines);
     // drawWithStyle(ctx, linesStyle, circles);
   });
-});
+};
+
+const animate = () => {
+  drawSpot();
+  requestAnimationFrame(animate);
+};
+animate();
 
 window.addEventListener("resize", () => adjustCanvasSize(canvas));
 canvas.addEventListener("click", ({ clientX: x, clientY: y }) => {
